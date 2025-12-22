@@ -7,9 +7,12 @@
 #include <zephyr/kernel.h>
 #include <zephyr/bluetooth/bluetooth.h>
 #include <zephyr/bluetooth/services/nus.h>
+#include <zephyr/console/console.h>
 
-#define DEVICE_NAME		CONFIG_BT_DEVICE_NAME
-#define DEVICE_NAME_LEN		(sizeof(DEVICE_NAME) - 1)
+#include "bsp.h"
+
+#define DEVICE_NAME CONFIG_BT_DEVICE_NAME
+#define DEVICE_NAME_LEN (sizeof(DEVICE_NAME) - 1)
 
 static const struct bt_data ad[] = {
 	BT_DATA_BYTES(BT_DATA_FLAGS, (BT_LE_AD_GENERAL | BT_LE_AD_NO_BREDR)),
@@ -19,6 +22,10 @@ static const struct bt_data ad[] = {
 static const struct bt_data sd[] = {
 	BT_DATA_BYTES(BT_DATA_UUID128_ALL, BT_UUID_NUS_SRV_VAL),
 };
+
+#if BSP_CLI_ENABLED
+K_THREAD_DEFINE(thread_cli, 2048, cliTask, NULL, NULL, NULL, 7, 0, 0);
+#endif
 
 static void notif_enabled(bool enabled, void *ctx)
 {
@@ -47,26 +54,33 @@ int main(void)
 	printk("Sample - Bluetooth Peripheral NUS\n");
 
 	err = bt_nus_cb_register(&nus_listener, NULL);
-	if (err) {
+	if (err)
+	{
 		printk("Failed to register NUS callback: %d\n", err);
 		return err;
 	}
 
 	err = bt_enable(NULL);
-	if (err) {
+	if (err)
+	{
 		printk("Failed to enable bluetooth: %d\n", err);
 		return err;
 	}
 
 	err = bt_le_adv_start(BT_LE_ADV_CONN_FAST_1, ad, ARRAY_SIZE(ad), sd, ARRAY_SIZE(sd));
-	if (err) {
+	if (err)
+	{
 		printk("Failed to start advertising: %d\n", err);
 		return err;
 	}
 
+	// bsp init
+	bsp_gpio_init();
+
 	printk("Initialization complete\n");
 
-	while (true) {
+	while (true)
+	{
 		const char *hello_world = "Hello World!\n";
 
 		k_sleep(K_SECONDS(3));
@@ -74,9 +88,11 @@ int main(void)
 		err = bt_nus_send(NULL, hello_world, strlen(hello_world));
 		printk("Data send - Result: %d\n", err);
 
-		if (err < 0 && (err != -EAGAIN) && (err != -ENOTCONN)) {
+		if (err < 0 && (err != -EAGAIN) && (err != -ENOTCONN))
+		{
 			return err;
 		}
+		bsp_led_toggle(BSP_LED_RED);
 	}
 
 	return 0;

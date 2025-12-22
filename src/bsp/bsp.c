@@ -1,0 +1,28 @@
+/*
+
+*/
+
+#include "bsp.h"
+
+BSP_ST g_Bsp = {0};
+
+int bsp_init(void)
+{
+
+    return 0;
+}
+
+void bsp_sleep_sec(int sec)
+{
+    k_sleep(K_SECONDS(sec));
+}
+
+void bsp_sleep_ms(int ms)
+{
+    k_sleep(K_MSEC(ms));
+}
+
+void bsp_sleep_us(int us)
+{
+    k_sleep(K_USEC(us));
+}
