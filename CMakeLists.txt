@@ -7,9 +7,11 @@ target_include_directories(app PRIVATE
 
 target_sources(app PRIVATE
         src/main.c
-        src/getline.c
+        src/cli/getline.c
         src/cli/cli_command.c
         src/cli/cli.c
         src/bsp/bsp.c
-        src/bsp/driver/bsp_gpio.c
+        src/bsp/bsp_periodic_task.c
+        src/bsp/driver/bsp_led_key.c
+        src/bsp/bsp_msg_rcv_task.c
 )

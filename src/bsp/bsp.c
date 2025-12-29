@@ -8,6 +8,9 @@ BSP_ST g_Bsp = {0};
 
 int bsp_init(void)
 {
+    g_Bsp.prdTick = BSP_DEFAULT_PRD_TICK_COUNT;
+
+    bsp_gpio_init();
 
     return 0;
 }

@@ -16,7 +16,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 
-// #include "esp_log.h"
+#include <zephyr/logging/log.h>
 
 #define SPAN_OF(x) (sizeof(x) / (sizeof(x[0])))
 #define INC_MOD(i, m) (((i) >= ((m) - 1)) ? (0) : ((i) + 1))
@@ -25,7 +25,7 @@
 #define TRUE 1
 
 /* Make sure that the CLI can still work when DEBUG is off */
-#define CLI_PRINT printf
+#define CLI_PRINT printk
 
 // #define CLI_LOG(y, ...) ESP_LOGI("cli", y)
 

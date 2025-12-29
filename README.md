@@ -9,7 +9,7 @@ BLE NUS based solution.
 - ~~cli porting via USB CDC~~
   - ~~there was an issue due to timeout at gets/fget and so on~~
   - ~~applied console_getline() from nrf package and it fixes the issue~~
-- RGB LED via GPIO
+- ~~RGB LED via GPIO~~
 - Charger LED via GPIO
 - 6-Axis Accelerometer (LSM6DS3TR) via I2C
   - <https://www.st.com/resource/en/datasheet/lsm6ds3tr-c.pdf>
@@ -31,17 +31,22 @@ BLE NUS based solution.
     - External UART/I2C/GPIOs
 - Define BLE protocols
   - Tx/Rx feature via BLE, Phone or PC
+  - Refer NUS_MSG_EN in bsp.h
 - Simple BLE monitor application
   - For Android or Windows
+  - flutter_xiao_nrf52840_nus_mon
 
 ## History
 
 - 2025.12.22
   - First commit
+- 2025.12.29
+  - LED control via BLE App from Windows
+    - Red/Green/Blue LED control via NUS is work
 
 ## Info
 
-- Author : Louiey
+- Author : Louiey <louiey.dev@gmail.com>
 - HW platform
   - SeeedStudio xiao nRF52840 sense kit + expansion board
 - SDK

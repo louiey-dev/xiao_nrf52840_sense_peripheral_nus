@@ -16,7 +16,7 @@
 
 #include "bsp.h"
 
-LOG_MODULE_REGISTER(bsp_gpio);
+LOG_MODULE_REGISTER(bsp_gpio, LOG_LEVEL_INF);
 
 #define BUTTONS_NODE DT_PATH(buttons)
 #define LEDS_NODE DT_PATH(leds)
@@ -68,7 +68,7 @@ int bsp_led_init(void)
         err = gpio_pin_configure_dt(&leds[i], GPIO_OUTPUT);
         if (err)
         {
-            printk("Cannot configure LED gpio\n");
+            ERR("Cannot configure LED gpio\n");
             return err;
         }
     }
@@ -78,7 +78,7 @@ int bsp_led_init(void)
 /**
  * @brief control led on/off
  *
- * @param led, BSP_LED_RED/GREEN/BLUE
+ * @param led, 0/1/2 = BSP_LED_RED/GREEN/BLUE
  * @param val , 0 : OFF 1 : ON
  * @return int. 0 : OK, !0 : ERROR
  */
@@ -87,23 +87,29 @@ int bsp_led_ctrl(int led, int val)
     int err = gpio_pin_set_dt(&leds[led], val);
     if (err)
     {
-        printk("Cannot write LED[%d] %s\n", led, val ? "ON" : "OFF");
+        ERR("Cannot write LED[%d] %s\n", led, val ? "ON" : "OFF");
         return err;
     }
-    printk("LED[%d] %s\n", led, val ? "ON" : "OFF");
+    INF("LED[%d] %s\n", led, val ? "ON" : "OFF");
 
     return 0;
 }
 
+/**
+ * @brief toggle leds
+ *
+ * @param led   led offset number. 0/1/2 = R/G/B
+ * @return int
+ */
 int bsp_led_toggle(int led)
 {
     int err = gpio_pin_toggle_dt(&leds[led]);
     if (err)
     {
-        printk("Cannot toggle LED[%d]\n", led);
+        ERR("Cannot toggle LED[%d]\n", led);
         return err;
     }
-    printk("LED[%d] toggle\n", led);
+    INF("LED[%d] toggle\n", led);
 
     return 0;
 }
