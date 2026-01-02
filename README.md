@@ -43,6 +43,9 @@ BLE NUS based solution.
 - 2025.12.29
   - LED control via BLE App from Windows
     - Red/Green/Blue LED control via NUS is work
+- 2026.01.02
+  - CONFIG_BT_DEVICE_NAME is not applied correctly so modified code to use CONFIG_BT_DEVICE_NAME
+  - PC util is updated universal_ble version to v1.0.0
 
 ## Info
 
