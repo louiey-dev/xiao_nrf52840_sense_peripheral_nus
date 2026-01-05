@@ -10,7 +10,8 @@ BLE NUS based solution.
   - ~~there was an issue due to timeout at gets/fget and so on~~
   - ~~applied console_getline() from nrf package and it fixes the issue~~
 - ~~RGB LED via GPIO~~
-- Charger LED via GPIO
+- ~~Charger LED via GPIO~~
+  - ~~using PWM~~
 - 6-Axis Accelerometer (LSM6DS3TR) via I2C
   - <https://www.st.com/resource/en/datasheet/lsm6ds3tr-c.pdf>
 - MIC (MSM261D3526H1CPM) via PDM I/F
@@ -35,6 +36,7 @@ BLE NUS based solution.
 - Simple BLE monitor application
   - For Android or Windows
   - flutter_xiao_nrf52840_nus_mon
+- NVS feature
 
 ## History
 
@@ -46,6 +48,9 @@ BLE NUS based solution.
 - 2026.01.02
   - CONFIG_BT_DEVICE_NAME is not applied correctly so modified code to use CONFIG_BT_DEVICE_NAME
   - PC util is updated universal_ble version to v1.0.0
+- 2026.01.05
+  - BLE link count increased to 4 from 1
+  - Prd tick setting cmd added
 
 ## Info
 

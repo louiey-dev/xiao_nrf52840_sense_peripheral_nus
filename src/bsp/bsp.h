@@ -50,11 +50,31 @@
 #define BSP_MAX_MSG_LEN 128 // used to communicate with app via NUS
 
 /*********************************************************/
+typedef struct LED_S
+{
+    uint8_t led_red;
+    uint8_t led_green;
+    uint8_t led_blue;
+    uint8_t reserved;
+
+    uint32_t pwm_led_width;
+} LED_ST;
+
+typedef struct BATT_ADC_S
+{
+    int value;
+} BATT_ADC_ST;
+
 typedef struct BSP_S
 {
     uint8_t isInit;
 
     uint16_t prdTick; // periodic task tick count in ms
+
+    LED_ST led_status;
+
+    BATT_ADC_ST batt_adc;
+
 } BSP_ST;
 
 /* Define message structure */
@@ -74,9 +94,9 @@ enum NUS_MSG_EN
 {
     NUS_MSG_NONE = 0,
     NUS_MSG_LED_CTRL = 1,
-    NUS_MSG_00 = 2,
-    NUS_MSG_01 = 3,
-    NUS_MSG_02 = 4,
+    NUS_MSG_GET_BATT_ADC = 2,
+    NUS_MSG_SET_PWM_LED_WIDTH = 3,
+    NUS_MSG_SET_PRD_TICK = 4,
     NUS_MSG_03 = 5,
     NUS_MSG_04 = 6,
     NUS_MSG_05 = 7,
@@ -103,6 +123,7 @@ int bsp_gpio_init(void);
 int bsp_led_init(void);
 int bsp_led_ctrl(int led, int val);
 int bsp_led_toggle(int led);
+int bsp_pwm_led_ctrl(uint32_t pulse_width);
 
 void cliTask(void *pvParameters);
 

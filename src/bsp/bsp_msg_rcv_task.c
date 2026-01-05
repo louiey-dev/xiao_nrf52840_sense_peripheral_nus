@@ -39,11 +39,43 @@ static void msg_rcv_task(void)
             switch (received_data.id)
             {
             case NUS_MSG_LED_CTRL:
-                uint8_t num = received_data.message[0];
+                uint8_t num = received_data.message[0]; // 0 : RED, 1 : GREEN, 2 : BLUE
                 uint8_t onoff = received_data.message[1];
+
+                switch (num)
+                {
+                case 0:
+                    g_Bsp.led_status.led_red = onoff;
+                    break;
+                case 1:
+                    g_Bsp.led_status.led_green = onoff;
+                    break;
+                case 2:
+                    g_Bsp.led_status.led_blue = onoff;
+                    break;
+                default:
+                    break;
+                }
 
                 bsp_led_ctrl(num, onoff);
                 INF("LED[%d] %d", num, onoff);
+                break;
+
+            case NUS_MSG_GET_BATT_ADC:
+
+                break;
+
+            case NUS_MSG_SET_PWM_LED_WIDTH:
+                uint32_t pulse_width = received_data.message[0] << 24 | received_data.message[1] << 16 | received_data.message[2] << 8 | received_data.message[3];
+                bsp_pwm_led_ctrl(pulse_width);
+                g_Bsp.led_status.pwm_led_width = pulse_width;
+                INF("LED pulse_width : %d nsec", g_Bsp.led_status.pwm_led_width);
+                break;
+
+            case NUS_MSG_SET_PRD_TICK:
+                uint16_t tick = received_data.message[0] << 8 | received_data.message[1];
+                g_Bsp.prdTick = tick;
+                INF("PRD tick : %d ms", g_Bsp.prdTick);
                 break;
 
             default:

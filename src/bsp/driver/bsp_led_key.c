@@ -14,6 +14,8 @@
 #include <zephyr/logging/log.h>
 #include <nrfx.h>
 
+#include <zephyr/drivers/pwm.h>
+
 #include "bsp.h"
 
 LOG_MODULE_REGISTER(bsp_gpio, LOG_LEVEL_INF);
@@ -57,11 +59,11 @@ int bsp_gpio_init(void)
 /**
  * @brief LED init, BSP_LED_RED/GREEN/BLUE
  *
- * @return int
+ * @return int  0 : OK, non-zero : ERROR
  */
 int bsp_led_init(void)
 {
-    int err;
+    int err = 0;
 
     for (size_t i = 0; i < ARRAY_SIZE(leds); i++)
     {
@@ -72,15 +74,26 @@ int bsp_led_init(void)
             return err;
         }
     }
+
+    for (size_t i = 0; i < ARRAY_SIZE(leds); i++)
+    {
+        err = gpio_pin_set_dt(&leds[i], 0);
+        if (err)
+        {
+            ERR("Cannot control LED gpio\n");
+            return err;
+        }
+    }
+
     return 0;
 }
 
 /**
  * @brief control led on/off
  *
- * @param led, 0/1/2 = BSP_LED_RED/GREEN/BLUE
- * @param val , 0 : OFF 1 : ON
- * @return int. 0 : OK, !0 : ERROR
+ * @param led 0/1/2 = BSP_LED_RED/GREEN/BLUE
+ * @param val 0 : OFF 1 : ON
+ * @return int 0 : OK, !0 : ERROR
  */
 int bsp_led_ctrl(int led, int val)
 {
@@ -112,4 +125,46 @@ int bsp_led_toggle(int led)
     INF("LED[%d] toggle\n", led);
 
     return 0;
+}
+
+/**
+ * @brief PWM LED control
+ *
+ */
+/* * Get the node specs from the "pwm-led0" alias
+ * defined in the .overlay file
+ */
+static const struct pwm_dt_spec pwm_led0 = PWM_DT_SPEC_GET(DT_ALIAS(pwm_led0));
+
+#define MIN_PERIOD PWM_USEC(100)
+#define MAX_PERIOD PWM_USEC(20000)
+
+/**
+ * @brief   Control pwm led with given width in nanoseconds
+ *          1000 : 1ms, 1000,000 : 1sec
+ * @param pulse_width Pulse width in nanoseconds
+ * @return int 0 : ok, -1 : error
+ */
+int bsp_pwm_led_ctrl(uint32_t pulse_width)
+{
+    int ret = 0;
+
+    // 1. Check if the device is ready
+    if (!pwm_is_ready_dt(&pwm_led0))
+    {
+        LOG_ERR("Error: PWM device %s is not ready", pwm_led0.dev->name);
+        return -1;
+    }
+
+    // 2. Set the PWM cycle
+    // params: device spec, period (ns), pulse width (ns)
+    ret = pwm_set_pulse_dt(&pwm_led0, pulse_width);
+
+    if (ret < 0)
+    {
+        LOG_ERR("Error in pwm_set_pulse_dt()");
+        return -1;
+    }
+
+    return ret;
 }
