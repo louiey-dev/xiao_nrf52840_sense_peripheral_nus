@@ -11,6 +11,7 @@ int bsp_init(void)
     g_Bsp.prdTick = BSP_DEFAULT_PRD_TICK_COUNT;
 
     bsp_gpio_init();
+    bsp_key_init();
 
     return 0;
 }

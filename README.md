@@ -24,7 +24,8 @@ BLE NUS based solution.
     - <https://files.seeedstudio.com/wiki/Grove-OLED-Display-0.96-SSD1315-/res/OEL%20Display%20Module.pdf>
   - RTC (PCF8563) via I2C
     - <https://www.nxp.com/docs/en/data-sheet/PCF8563.pdf>
-  - User button input via GPIO
+  - ~~User button input via GPIO~~
+    - ~~app.overlay added to support this~~
   - Buzzer (LET5020CS-03L) via PWM
     - <https://www.micros.com.pl/mediaserver/info-pbsmb-5523sa.pdf>
   - SD Card
@@ -51,6 +52,7 @@ BLE NUS based solution.
 - 2026.01.05
   - BLE link count increased to 4 from 1
   - Prd tick setting cmd added
+  - GPIO Key input handler added
 
 ## Info
 

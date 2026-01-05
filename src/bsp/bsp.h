@@ -119,11 +119,13 @@ enum NUS_MSG_EN
 /*********************************************************/
 
 /**** APIs ****/
+int bsp_init(void);
 int bsp_gpio_init(void);
 int bsp_led_init(void);
 int bsp_led_ctrl(int led, int val);
 int bsp_led_toggle(int led);
 int bsp_pwm_led_ctrl(uint32_t pulse_width);
+int bsp_key_init(void);
 
 void cliTask(void *pvParameters);
 
@@ -132,5 +134,5 @@ void bsp_sleep_ms(int ms);
 void bsp_sleep_us(int us);
 
 int bsp_nus_msg_send_to_rcv_task(struct nus_msg_packet *p, int len);
-
+void ble_nus_send_data(char *p, int len);
 /**************/

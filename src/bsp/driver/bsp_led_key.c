@@ -168,3 +168,67 @@ int bsp_pwm_led_ctrl(uint32_t pulse_width)
 
     return ret;
 }
+
+/**
+ * @brief GPIO Button input
+ *
+ */
+/* 1. Get the button specification from the Device Tree alias "my-button" */
+static const struct gpio_dt_spec button = GPIO_DT_SPEC_GET(DT_ALIAS(my_button), gpios);
+
+/* 2. Define the callback struct
+ * This struct holds the context for our interrupt handler.
+ */
+static struct gpio_callback button_cb_data;
+
+/* 3. The Interrupt Service Routine (ISR)
+ * This function runs when the button is pressed. Keep it short!
+ */
+void button_pressed(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
+{
+    LOG_INF("Button pressed on %d, %s", pins, dev->name);
+    ble_nus_send_data("Button pressed", strlen("Button pressed"));
+}
+
+int bsp_key_init(void)
+{
+    int ret = 0;
+
+    /* Check if the GPIO device (Port 0) is ready */
+    if (!gpio_is_ready_dt(&button))
+    {
+        LOG_ERR("Error: GPIO device %s is not ready", button.port->name);
+        return -1;
+    }
+
+    /* 1. Configure the Pin
+     * This applies the flags (Input, Pull-Up) from the overlay.
+     */
+    ret = gpio_pin_configure_dt(&button, GPIO_INPUT);
+    if (ret != 0)
+    {
+        LOG_ERR("Error %d: failed to configure %s pin %d", ret, button.port->name, button.pin);
+        return -1;
+    }
+
+    /* 2.  Configure the Interrupt
+     * We want it to trigger when the button is 'pressed' (Active level).
+     * GPIO_INT_EDGE_TO_ACTIVE handles the transition based on our Active Low setting.
+     */
+    ret = gpio_pin_interrupt_configure_dt(&button, GPIO_INT_EDGE_TO_ACTIVE);
+    if (ret != 0)
+    {
+        LOG_ERR("Error %d: failed to configure interrupt on %s pin %d", ret, button.port->name, button.pin);
+        return -1;
+    }
+
+    /* 3. Initialize and Add the Callback
+     * This links the hardware interrupt to our C function 'button_pressed'.
+     */
+    gpio_init_callback(&button_cb_data, button_pressed, BIT(button.pin));
+    gpio_add_callback(button.port, &button_cb_data);
+
+    LOG_INF("Press the button on P0.03 to trigger an event.");
+
+    return 0;
+}
