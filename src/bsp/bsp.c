@@ -12,6 +12,7 @@ int bsp_init(void)
 
     bsp_gpio_init();
     bsp_key_init();
+    bsp_lsm6ds3tr_init(NULL);
 
     return 0;
 }

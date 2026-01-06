@@ -2,6 +2,7 @@
     aliases {
         /* Create a friendly name for our C code to reference */
         my-button = &button0;
+        imu = &lsm6ds3tr_c;
     };
 
     buttons {

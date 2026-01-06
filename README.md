@@ -12,8 +12,10 @@ BLE NUS based solution.
 - ~~RGB LED via GPIO~~
 - ~~Charger LED via GPIO~~
   - ~~using PWM~~
-- 6-Axis Accelerometer (LSM6DS3TR) via I2C
-  - <https://www.st.com/resource/en/datasheet/lsm6ds3tr-c.pdf>
+- ~~6-Axis Accelerometer (LSM6DS3TR) via I2C~~
+  - ~~used zephyr driver, sensor subsystem~~
+  - ~~refer prj.conf~~
+  - ~~<https://www.st.com/resource/en/datasheet/lsm6ds3tr-c.pdf>~~
 - MIC (MSM261D3526H1CPM) via PDM I/F
   - <https://files.seeedstudio.com/wiki/XIAO-BLE/mic-MSM261D3526H1CPM-ENG.pdf>
 - Battery Charger (bq25100)
@@ -53,6 +55,9 @@ BLE NUS based solution.
   - BLE link count increased to 4 from 1
   - Prd tick setting cmd added
   - GPIO Key input handler added
+- 2026.01.06
+  - IMU sensor
+  - Zephyr sensor subsystem used
 
 ## Info
 

@@ -10,6 +10,7 @@
 #include <zephyr/drivers/gpio.h>
 #include <zephyr/sys/util.h>
 #include <zephyr/logging/log.h>
+#include <zephyr/drivers/sensor.h>
 // #include <nrfx.h>
 
 #define USER_FUNC __FUNCTION__
@@ -50,6 +51,24 @@
 #define BSP_MAX_MSG_LEN 128 // used to communicate with app via NUS
 
 /*********************************************************/
+typedef struct LSM6DS3TR_S
+{
+    struct sensor_value accel[3];
+    struct sensor_value gyro[3];
+
+    int16_t acc_x;
+    int16_t acc_y;
+    int16_t acc_z;
+    int16_t gyro_x;
+    int16_t gyro_y;
+    int16_t gyro_z;
+
+    uint8_t isInit;
+    uint8_t reserved1;
+    uint8_t reserved2;
+    uint8_t reserved3;
+} LSM6DS3TR_ST;
+
 typedef struct LED_S
 {
     uint8_t led_red;
@@ -75,13 +94,15 @@ typedef struct BSP_S
 
     BATT_ADC_ST batt_adc;
 
+    LSM6DS3TR_ST imu;
+
 } BSP_ST;
 
 /* Define message structure */
 struct nus_msg_packet
 {
     uint16_t id;
-    uint16_t len; // total received length of message includes id
+    uint16_t len; // total received length of message includes id + len
     char message[BSP_MAX_MSG_LEN];
 };
 /*********************************************************/
@@ -93,10 +114,10 @@ struct nus_msg_packet
 enum NUS_MSG_EN
 {
     NUS_MSG_NONE = 0,
-    NUS_MSG_LED_CTRL = 1,
+    NUS_MSG_LED_CTRL = 1, // ID(2) | LEN(2) | LED_NUM(1) | LED_ONOFF(1)
     NUS_MSG_GET_BATT_ADC = 2,
-    NUS_MSG_SET_PWM_LED_WIDTH = 3,
-    NUS_MSG_SET_PRD_TICK = 4,
+    NUS_MSG_SET_PWM_LED_WIDTH = 3, // ID(2) | LEN(2) | PULSE_WIDTH(4)
+    NUS_MSG_SET_PRD_TICK = 4,      // ID(2) | LEN(2) | PRD_TICK(2)
     NUS_MSG_03 = 5,
     NUS_MSG_04 = 6,
     NUS_MSG_05 = 7,
@@ -108,7 +129,7 @@ enum NUS_MSG_EN
     NUS_MSG_11 = 13,
     NUS_MSG_12 = 14,
     NUS_MSG_13 = 15,
-    NUS_MSG_14 = 16,
+    NUS_MSG_NOTIFY_IMU = 16, // ID(2) | LEN(2) | ACC_X(2) | ACC_Y(2) | ACC_Z(2) | GYRO_X(2) | GYRO_Y(2) | GYRO_Z(2)
     NUS_MSG_15 = 17,
     NUS_MSG_16 = 18,
     NUS_MSG_17 = 19,
@@ -135,4 +156,7 @@ void bsp_sleep_us(int us);
 
 int bsp_nus_msg_send_to_rcv_task(struct nus_msg_packet *p, int len);
 void ble_nus_send_data(char *p, int len);
+
+int bsp_lsm6ds3tr_init(void *p);
+int bsp_lsm6ds3tr_read(void *p);
 /**************/

@@ -14,4 +14,5 @@ target_sources(app PRIVATE
         src/bsp/bsp_periodic_task.c
         src/bsp/driver/bsp_led_key.c
         src/bsp/bsp_msg_rcv_task.c
+        src/bsp/sensors/bsp_lsm6ds3tr.c
 )

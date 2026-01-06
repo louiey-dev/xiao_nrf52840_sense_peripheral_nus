@@ -29,9 +29,9 @@ static void bt_receive_cb(struct bt_conn *conn, const uint8_t *const data, uint1
 	LOG_INF("Received %u bytes over BLE. First byte: 0x%02x", len, data[0]);
 
 	send_data.id = ((data[0] << 8) | data[1]);
-	send_data.len = len + 2;
+	send_data.len = ((data[2] << 8) | data[3]);
 	// memset(send_data.message, 0, BSP_MAX_MSG_LEN);
-	memcpy(send_data.message, &data[2], len);
+	memcpy(send_data.message, &data[4], len - 4);
 
 	int err = bsp_nus_msg_send_to_rcv_task(&send_data, len); // len + sizeof id + sizeof len
 	if (err < 0)
@@ -107,7 +107,7 @@ void ble_nus_send_data(char *p, int len)
 		return;
 	}
 
-	int err = bt_nus_send(current_conn, p, len);
+	int err = bt_nus_send(current_conn, (const uint8_t *)p, len);
 	if (err)
 	{
 		LOG_ERR("Failed to send data (err %d)", err);
