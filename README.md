@@ -24,8 +24,8 @@ BLE NUS based solution.
 - Expansion Board
   - OLED LCD 0.96" (ZJY-2864KSWPG01) via I2C
     - <https://files.seeedstudio.com/wiki/Grove-OLED-Display-0.96-SSD1315-/res/OEL%20Display%20Module.pdf>
-  - RTC (PCF8563) via I2C
-    - <https://www.nxp.com/docs/en/data-sheet/PCF8563.pdf>
+  - ~~RTC (PCF8563) via I2C~~
+    - ~~<https://www.nxp.com/docs/en/data-sheet/PCF8563.pdf>~~
   - ~~User button input via GPIO~~
     - ~~app.overlay added to support this~~
   - Buzzer (LET5020CS-03L) via PWM
@@ -58,6 +58,9 @@ BLE NUS based solution.
 - 2026.01.06
   - IMU sensor
   - Zephyr sensor subsystem used
+- 2026.01.07
+  - RTC Get/Set added
+    - works with cli and ble
 
 ## Info
 

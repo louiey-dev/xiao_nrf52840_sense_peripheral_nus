@@ -18,6 +18,8 @@ K_MSGQ_DEFINE(nus_msgq, sizeof(struct nus_msg_packet), 10, 4);
 
 K_THREAD_DEFINE(msg_rcv_id, 2048, msg_rcv_task, NULL, NULL, NULL, 7, 0, 0);
 
+static struct nus_msg_packet nus_data;
+
 static void msg_rcv_task(void)
 {
     struct nus_msg_packet received_data;
@@ -76,6 +78,31 @@ static void msg_rcv_task(void)
                 uint16_t tick = received_data.message[0] << 8 | received_data.message[1];
                 g_Bsp.prdTick = tick;
                 INF("PRD tick : %d ms", g_Bsp.prdTick);
+                break;
+
+            case NUS_MSG_SET_RTC:
+                RTC_TIME_ST date = {0};
+                date.year = received_data.message[0];
+                date.mon = received_data.message[1];
+                date.day = received_data.message[2];
+                date.weekday = received_data.message[3];
+                date.hour = received_data.message[4];
+                date.min = received_data.message[5];
+                date.sec = received_data.message[6];
+                bsp_rtc_set_time(&date);
+                INF("RTC set 20%02d-%02d-%02d, %02d:%02d:%02d", date.year, date.mon, date.day, date.hour, date.min, date.sec);
+                break;
+
+            case NUS_MSG_GET_RTC:
+                RTC_TIME_ST gdate = {0};
+                bsp_rtc_get_time(&gdate);
+
+                nus_data.id = NUS_MSG_NOTIFY_RTC;
+                nus_data.len = sizeof(RTC_TIME_ST);
+                memcpy(nus_data.message, &gdate, sizeof(RTC_TIME_ST));
+                ble_nus_send_data((char *)&nus_data, sizeof(RTC_TIME_ST) + 4);
+
+                INF("RTC get 20%02d-%02d-%02d, %02d:%02d:%02d", gdate.year, gdate.mon, gdate.day, gdate.hour, gdate.min, gdate.sec);
                 break;
 
             default:

@@ -103,14 +103,14 @@ void ble_nus_send_data(char *p, int len)
 {
 	if (!current_conn)
 	{
-		LOG_WRN("No device connected, skipping send.");
+		// LOG_WRN("No device connected, skipping send.");
 		return;
 	}
 
 	int err = bt_nus_send(current_conn, (const uint8_t *)p, len);
 	if (err)
 	{
-		LOG_ERR("Failed to send data (err %d)", err);
+		// LOG_ERR("Failed to send data (err %d)", err);
 	}
 	else
 	{

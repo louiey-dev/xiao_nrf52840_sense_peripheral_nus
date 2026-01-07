@@ -42,7 +42,7 @@ static void trigger_handler(const struct device *dev,
     k_sem_give(&imu_sem);
 }
 
-typedef struct __attribute__((packed))
+typedef struct PACKED
 {
     uint16_t id;
     uint16_t len; // total length of message includes id + len
@@ -102,7 +102,7 @@ static void imu_task(void)
         g_Bsp.imu.gyro_y = packet.gyro_y;
         g_Bsp.imu.gyro_z = packet.gyro_z;
 
-        ble_nus_send_data(&packet, sizeof(packet));
+        ble_nus_send_data((uint8_t *)&packet, sizeof(packet));
 #else
 
         g_Bsp.imu.accel[0] = accel[0];

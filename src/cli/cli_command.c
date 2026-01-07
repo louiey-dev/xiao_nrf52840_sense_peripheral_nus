@@ -215,8 +215,8 @@ static Bool cliCommandInterpreter(int command, int argc, char **argv)
     break;
 
   case CLI_CMD_RTC_SET:
-#if 0
-    PCF_DateTime date = {0};
+#if 1
+    RTC_TIME_ST date = {0};
 
     year = atoi(argv[1]);
     mon = atoi(argv[2]);
@@ -227,25 +227,25 @@ static Bool cliCommandInterpreter(int command, int argc, char **argv)
     sec = atoi(argv[7]);
 
     date.year = year;
-    date.month = mon;
+    date.mon = mon;
     date.weekday = wday;
     date.day = day;
     date.hour = hour;
-    date.minute = min;
-    date.second = sec;
+    date.min = min;
+    date.sec = sec;
 
-    bsp_rtc_pcf8563_set_date_time(&date);
+    bsp_rtc_set_time(&date);
 #endif
 
     CLI_PRINT("RTC Set %04d-%02d-%02d, %02d:%02d:%02d\n", year, mon, day, hour, min, sec);
     break;
 
   case CLI_CMD_RTC_GET:
-#if 0
-    PCF_DateTime gdate = {0};
+#if 1
+    RTC_TIME_ST gdate = {0};
 
-    bsp_rtc_pcf8563_get_date_time(&gdate);
-    CLI_PRINT("RTC Get %04d-%02d-%02d, %02d:%02d:%02d\n", gdate.year, gdate.month, gdate.day, gdate.hour, gdate.minute, gdate.second);
+    bsp_rtc_get_time(&gdate);
+    CLI_PRINT("RTC Get 20%02d-%02d-%02d, %02d:%02d:%02d\n", gdate.year, gdate.mon, gdate.day, gdate.hour, gdate.min, gdate.sec);
 #endif
     break;
 #endif

@@ -15,4 +15,6 @@ target_sources(app PRIVATE
         src/bsp/driver/bsp_led_key.c
         src/bsp/bsp_msg_rcv_task.c
         src/bsp/sensors/bsp_lsm6ds3tr.c
+        src/bsp/sensors/bsp_rtc_pcf8563t.c
+        # src/bsp/sensors/bsp_mic_msm261d.c
 )

@@ -3,6 +3,7 @@
         /* Create a friendly name for our C code to reference */
         my-button = &button0;
         imu = &lsm6ds3tr_c;
+        dmic-dev = &pdm0;
     };
 
     buttons {
@@ -12,5 +13,70 @@
             gpios = <&gpio0 3 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
             label = "User Button on P0.03";
         };
+    };
+};
+
+
+&pdm0 {
+    pinctrl-0 = <&pdm0_default>;
+    pinctrl-1 = <&pdm0_sleep>;
+    pinctrl-names = "default", "sleep";
+    clock-source = "PCLK32M";
+};
+
+
+/* 1. Configure the Pin Control (Assign pins to PDM peripheral) */
+&pinctrl {
+    pdm0_default: pdm0_default {
+        group1 {
+            psels = <NRF_PSEL(PDM_CLK, 1, 00)>, /* P0.26 */
+                    <NRF_PSEL(PDM_DIN, 0, 16)>;  /* P0.27 */
+        };
+    };
+
+    pdm0_sleep: pdm0_sleep {
+        group1 {
+            psels = <NRF_PSEL(PDM_CLK, 1, 00)>,
+                    <NRF_PSEL(PDM_DIN, 0, 16)>;
+            low-power-enable;
+        };
+    };
+
+    /* State: Default (Active) */
+    i2c1_default: i2c1_default {
+        group1 {
+            psels = <NRF_PSEL(TWIM_SDA, 0, 4)>, /* P0.04 for SDA */
+                    <NRF_PSEL(TWIM_SCL, 0, 5)>;  /* P0.05 for SCL */
+            bias-pull-up; /* Enable internal pull-ups */
+        };
+    };
+
+    /* State: Sleep (Low Power) */
+    i2c1_sleep: i2c1_sleep {
+        group1 {
+            psels = <NRF_PSEL(TWIM_SDA, 0, 4)>,
+                    <NRF_PSEL(TWIM_SCL, 0, 5)>;
+            low-power-enable;
+        };
+    };
+};
+
+&i2c1 {
+    status = "okay";
+    compatible = "nordic,nrf-twim";
+
+    /* Link to the pins defined above */
+    pinctrl-0 = <&i2c1_default>;
+    pinctrl-1 = <&i2c1_sleep>;
+    pinctrl-names = "default", "sleep";
+
+    /* Set bus speed (Standard 100kHz or Fast 400kHz) */
+    clock-frequency = <I2C_BITRATE_FAST>;
+
+    /* Define your PCF8563 device here */
+    pcf8563: pcf8563@51 {
+        compatible = "i2c-device";
+        reg = <0x51>;
+        label = "PCF8563";
     };
 };
