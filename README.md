@@ -39,7 +39,8 @@ BLE NUS based solution.
 - Simple BLE monitor application
   - For Android or Windows
   - flutter_xiao_nrf52840_nus_mon
-- NVS feature
+- ~~NVS feature~~
+  - ~~nvs init/read/write/reset added~~
 
 ## History
 
@@ -61,6 +62,8 @@ BLE NUS based solution.
 - 2026.01.07
   - RTC Get/Set added
     - works with cli and ble
+  - 2026.01.08
+    - NVS init/read/write/reset added
 
 ## Info
 
@@ -70,3 +73,9 @@ BLE NUS based solution.
 - SDK
   - NRF Connect SDK, v3.1.1
   - vscode
+
+## Partition Manager (flash partitions) 🔧
+
+- **Authoritative source:** Partitions are defined by Partition Manager (`pm.yml`) and take precedence over static DTS partitions for this build. ⚠️
+- **Where to edit:** Update the appropriate PM source file under `nrf/subsys/partition_manager/` (files named `pm.yml.*`) or add an image-specific `pm.yml` in your application to override.
+- **After changes:** Rebuild the project — the generated files `build/partitions.yml`, `build/pm.config`, and `include/generated/pm.yml` reflect the resolved layout.

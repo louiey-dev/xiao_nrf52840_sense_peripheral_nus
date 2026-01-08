@@ -173,6 +173,38 @@ static CliJte cliCommandTable[] =
          0,
          &cliCommandInterpreter},
         //////////////////////////////////////////////////////
+        {"nvs_init",
+         NULL,
+         "NVS initialize",
+         CLI_CMD_NVS_INIT,
+         1,
+         NULL,
+         0,
+         &cliCommandInterpreter},
+         {"nvs_get",
+         NULL,
+         "NVS Read",
+         CLI_CMD_NVS_GET,
+         1,
+         NULL,
+         0,
+         &cliCommandInterpreter},
+         {"nvs_set",
+         NULL,
+         "NVS write info",
+         CLI_CMD_NVS_SET,
+         1,
+         NULL,
+         0,
+         &cliCommandInterpreter},
+         {"nvs_reset",
+         NULL,
+         "NVS reset so clear NVS",
+         CLI_CMD_NVS_RESET,
+         1,
+         NULL,
+         0,
+         &cliCommandInterpreter},
 };
 
 void cliCommandsInitialise(void)
@@ -315,6 +347,27 @@ static Bool cliCommandInterpreter(int command, int argc, char **argv)
     CLI_PRINT("Buzzer duty set to %d\n", (int)u32);
     break;
   /********************************************************/
+
+  case CLI_CMD_NVS_INIT:
+    bsp_nvs_init();
+    CLI_PRINT("NVS initialize");
+    break;
+
+  case CLI_CMD_NVS_GET:
+    bsp_nvs_read(&g_Bsp.nvs);
+    CLI_PRINT("NVS read");
+    break;
+
+  case CLI_CMD_NVS_SET:
+    bsp_nvs_write(&g_Bsp.nvs);
+    CLI_PRINT("NVS write");
+    break;
+
+  case CLI_CMD_NVS_RESET:
+    bsp_nvs_reset();
+    CLI_PRINT("NVS reset");
+    break;
+
   default:
     // Unknown command! We should never get here...
     CLI_PRINT("Unknown command, %d\n", command);

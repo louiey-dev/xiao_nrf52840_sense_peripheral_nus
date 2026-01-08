@@ -48,6 +48,8 @@
  * @brief Basic Default Params
  *
  */
+#define BSP_DEFAULT_UNIQUE_ID 0xA55A
+#define BSP_DEFAULT_BOOT_COUNT 0
 #define BSP_DEFAULT_PRD_TICK_COUNT 1000 // ms
 
 #define BSP_MAX_MSG_LEN 128 // used to communicate with app via NUS
@@ -97,6 +99,16 @@ typedef struct PACKED RTC_TIME_S
     uint8_t sec;
 } RTC_TIME_ST;
 
+typedef struct PACKED NVS_INFO_S
+{
+    uint16_t unique_id; // 0xa55a
+    uint32_t boot_count;
+
+    uint16_t prdTick; // periodic task tick count in ms
+
+} NVS_INFO_ST;
+
+/*********************************************************/
 typedef struct PACKED BSP_S
 {
     uint8_t isInit;
@@ -110,6 +122,8 @@ typedef struct PACKED BSP_S
     LSM6DS3TR_ST imu;
 
     RTC_TIME_ST rtc;
+
+    NVS_INFO_ST nvs;
 } BSP_ST;
 
 /* Define message structure */
@@ -176,4 +190,9 @@ int bsp_lsm6ds3tr_read(void *p);
 
 int bsp_rtc_set_time(RTC_TIME_ST *time);
 int bsp_rtc_get_time(RTC_TIME_ST *time);
+
+int bsp_nvs_init(void);
+int bsp_nvs_read(NVS_INFO_ST *p);
+int bsp_nvs_write(NVS_INFO_ST *p);
+int bsp_nvs_reset(void);
 /**************/

@@ -18,13 +18,14 @@ static uint32_t message_count = 0;
 K_THREAD_DEFINE(thread_cli, 2048, cliTask, NULL, NULL, NULL, 7, 0, 0);
 #endif
 
+extern BSP_ST g_Bsp;
+
 /* --- Callbacks --- */
 
 // 1. Triggered when data arrives from the Phone/Central
 static void bt_receive_cb(struct bt_conn *conn, const uint8_t *const data, uint16_t len)
 {
 	struct nus_msg_packet send_data;
-	static uint32_t count = 0;
 
 	LOG_INF("Received %u bytes over BLE. First byte: 0x%02x", len, data[0]);
 
@@ -163,6 +164,8 @@ int main(void)
 
 	bsp_init();
 	bsp_led_init();
+	bsp_nvs_init();
+	bsp_nvs_read(&g_Bsp.nvs);
 
 	/* Main Loop: Sends data every 5 seconds */
 	while (1)
