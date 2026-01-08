@@ -100,6 +100,12 @@ void send_test_data(void)
 	}
 }
 
+/**
+ * @brief send data to central device via ble
+ * 
+ * @param p 	data packet pointer to send
+ * @param len 	data pakcet length
+ */
 void ble_nus_send_data(char *p, int len)
 {
 	if (!current_conn)

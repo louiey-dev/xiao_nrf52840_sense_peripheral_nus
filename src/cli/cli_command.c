@@ -205,6 +205,14 @@ static CliJte cliCommandTable[] =
          NULL,
          0,
          &cliCommandInterpreter},
+         {"buzzer",
+         NULL,
+         "Set buzzer with given frequency and duration",
+         CLI_CMD_BUZZER_SET,
+         3,
+         NULL,
+         0,
+         &cliCommandInterpreter},
 };
 
 void cliCommandsInitialise(void)
@@ -366,6 +374,13 @@ static Bool cliCommandInterpreter(int command, int argc, char **argv)
   case CLI_CMD_NVS_RESET:
     bsp_nvs_reset();
     CLI_PRINT("NVS reset");
+    break;
+
+  case CLI_CMD_BUZZER_SET:
+    u32 = (uint32_t)atoi(argv[1]);
+    uint32_t duration = (uint32_t)atoi(argv[2]);
+    bsp_pwm_buzzer(u32, duration);
+    CLI_PRINT("Buzzer freq : %d hz, duration : %d ms\n", (int)u32, (int)duration);
     break;
 
   default:

@@ -33,12 +33,12 @@ BLE NUS based solution.
   - SD Card
   - Grove interface
     - External UART/I2C/GPIOs
-- Define BLE protocols
-  - Tx/Rx feature via BLE, Phone or PC
-  - Refer NUS_MSG_EN in bsp.h
-- Simple BLE monitor application
-  - For Android or Windows
-  - flutter_xiao_nrf52840_nus_mon
+- ~~Define BLE protocols~~
+  - ~~Tx/Rx feature via BLE, Phone or PC~~
+  - ~~Refer NUS_MSG_EN in bsp.h~~
+- ~~Simple BLE monitor application~~
+  - ~~For Android or Windows~~
+  - ~~flutter_xiao_nrf52840_nus_mon~~
 - ~~NVS feature~~
   - ~~nvs init/read/write/reset added~~
 
@@ -62,8 +62,9 @@ BLE NUS based solution.
 - 2026.01.07
   - RTC Get/Set added
     - works with cli and ble
-  - 2026.01.08
-    - NVS init/read/write/reset added
+- 2026.01.08
+  - NVS init/read/write/reset added
+  - Buzzer pwm added, cli/ble
 
 ## Info
 

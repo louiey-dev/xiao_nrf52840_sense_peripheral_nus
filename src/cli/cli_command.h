@@ -30,6 +30,7 @@
 #define CLI_CMD_NVS_GET          (CLI_CMD_OFFSET + 33)
 #define CLI_CMD_NVS_SET          (CLI_CMD_OFFSET + 34)
 #define CLI_CMD_NVS_RESET        (CLI_CMD_OFFSET + 35)
+#define CLI_CMD_BUZZER_SET       (CLI_CMD_OFFSET + 36)
 
 #define CLI_CMD_LCD_INIT         (CLI_CMD_OFFSET + 40)
 #define CLI_CMD_LCD_WRITE_CHAR   (CLI_CMD_OFFSET + 41)

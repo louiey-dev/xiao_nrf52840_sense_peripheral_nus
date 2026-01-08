@@ -148,7 +148,7 @@ enum NUS_MSG_EN
     NUS_MSG_SET_PRD_TICK = 4,      // ID(2) | LEN(2) | PRD_TICK(2)
     NUS_MSG_GET_RTC = 5,
     NUS_MSG_SET_RTC = 6,
-    NUS_MSG_05 = 7,
+    NUS_MSG_SET_BUZZER = 7,         // ID(2) | LEN(2) | FREQ(2) | DURATION(2)
     NUS_MSG_06 = 8,
     NUS_MSG_07 = 9,
     NUS_MSG_08 = 10,
@@ -195,4 +195,6 @@ int bsp_nvs_init(void);
 int bsp_nvs_read(NVS_INFO_ST *p);
 int bsp_nvs_write(NVS_INFO_ST *p);
 int bsp_nvs_reset(void);
+
+int bsp_pwm_buzzer(uint16_t frequency_hz, uint16_t duration_ms);
 /**************/

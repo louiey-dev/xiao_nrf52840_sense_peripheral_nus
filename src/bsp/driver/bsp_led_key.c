@@ -190,6 +190,11 @@ void button_pressed(const struct device *dev, struct gpio_callback *cb, uint32_t
     ble_nus_send_data("Button pressed", strlen("Button pressed"));
 }
 
+/**
+ * @brief external key input initialize
+ * 
+ * @return int 0 : OK, -1 : ERROR
+ */
 int bsp_key_init(void)
 {
     int ret = 0;

@@ -23,6 +23,11 @@ static bool m_nvs_ready = false;
 
 extern BSP_ST g_Bsp;
 
+/**
+ * @brief initialize nRF flash NVS function area
+ * 
+ * @return int 0 : OK, -1 : ERROR
+ */
 int bsp_nvs_init(void)
 {
     int rc = 0;
@@ -68,6 +73,12 @@ int bsp_nvs_init(void)
     return 0;
 }
 
+/**
+ * @brief nRF flash NVS stored data read
+ * 
+ * @param p data pointer to read
+ * @return int 0 : OK, -1 : ERROR
+ */
 int bsp_nvs_read(NVS_INFO_ST *p)
 {
     int rc = 0;
@@ -111,6 +122,12 @@ int bsp_nvs_read(NVS_INFO_ST *p)
     return 0;
 }
 
+/**
+ * @brief nRF flash NVS data store to flash
+ * 
+ * @param p     data to store
+ * @return int  data length to store
+ */
 int bsp_nvs_write(NVS_INFO_ST *p)
 {
     int rc = 0;
@@ -144,6 +161,11 @@ int bsp_nvs_write(NVS_INFO_ST *p)
     return 0;
 }
 
+/**
+ * @brief erase flash NVS area to clean/reset
+ * 
+ * @return int 0 : OK, -1 : ERROR
+ */
 int bsp_nvs_reset(void)
 {
     int rc = 0;

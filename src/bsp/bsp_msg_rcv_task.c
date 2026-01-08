@@ -105,6 +105,13 @@ static void msg_rcv_task(void)
                 INF("RTC get 20%02d-%02d-%02d, %02d:%02d:%02d", gdate.year, gdate.mon, gdate.day, gdate.hour, gdate.min, gdate.sec);
                 break;
 
+            case NUS_MSG_SET_BUZZER:
+                uint16_t freq = received_data.message[0] << 8 | received_data.message[1];
+                uint16_t duration = received_data.message[2] << 8 | received_data.message[3];
+                bsp_pwm_buzzer(freq, duration);
+                INF("Buzzer freq : %d hz, duration : %d ms", freq, duration);
+                break;
+
             default:
                 INF("0x%04x, %d", received_data.id, received_data.len);
                 break;
@@ -113,6 +120,13 @@ static void msg_rcv_task(void)
     }
 }
 
+/**
+ * @brief       send ble received data from bt_cb to ble data rcv task via que
+ * 
+ * @param p     ble received data packet pointer
+ * @param len   ble received data length
+ * @return int  0 : OK, -1 : ERROR
+ */
 int bsp_nus_msg_send_to_rcv_task(struct nus_msg_packet *p, int len)
 {
     INF("0x%x, %d", p->id, len);
